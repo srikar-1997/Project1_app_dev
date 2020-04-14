@@ -1,6 +1,8 @@
+Date:2/14/2020
+
 difficulties faced in heroku :
-	creating password
-	creating app name
+	creating password - actually I have entered the password which I use for different sites but thre it asked me to enter a new password which I never used on other sites
+	creating app name - In heroku site when chossing name for the app I have tried so many names as it was displaying thisapp name is not available
 
 
 difficulties in flask/python:
