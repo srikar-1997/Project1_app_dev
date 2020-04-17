@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    User already exist
+{% endblock %}
+
+
+{% block body %}
+    <h1>Users already exist</h1>
+    <p>please use another username</p>
+    <a href = "{{ url_for('register') }}",>Registration form link</a>
+{% endblock %}
