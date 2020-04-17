@@ -25,7 +25,7 @@ def index():
 def register():
     if request.method == "GET":
         return render_template("Registration.html")
-    else:
+    elif request.form['action'] == 'register':
         name = request.form.get("username")
         pwd = request.form.get("password")
         pwd = pwd.encode('utf-8')
@@ -41,6 +41,9 @@ def register():
             return render_template("userexist.html")
         except:
             print('exception message', 'something went wrong in adding user')
+    
+    elif request.form['action'] == 'login':
+        return render_template("success.html")
 
         
 @app.route("/admin")
