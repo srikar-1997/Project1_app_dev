@@ -54,15 +54,15 @@ def register():
         # return render_template("success.html")
         reg = Users(username = name, password = hashed, timestamp = time_stamp)
         try:
-            reg1 = Users.query.get(reg.username)
+            # reg1 = Users.query.get(reg.username)
             db.session.add(reg)
             db.session.commit()
             return render_template("success.html")
-        # except exc.IntegrityError:
-        #     return render_template("userexist.html")
+        except exc.IntegrityError:
+            return render_template("userexist.html")
         except:
-            logging.debug('exception message', 'something went wrong in adding user')
-    return render_template("userexist.html")
+            print('exception message', 'something went wrong in adding user')
+    # return render_template("userexist.html")
         
 @app.route("/admin")
 def admin():
