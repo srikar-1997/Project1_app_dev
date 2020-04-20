@@ -1,75 +1,73 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel = "stylesheet" href = "{{ url_for('static', filename='css/Register.css') }}">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <form action = "{{ url_for('register')}}", method="POST">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4"></div>
-                    <div class="col-sm-4">
-                        {% if flag %}
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                Username already exists. Please login to continue.
-                            </div>
-                        {% endif %}
+{% extends "layout.html" %}
 
-                        {% if flag_1 %}
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                Password doesn't match. Please try again.
-                            </div>
-                        {% endif %}
+{% block title %}
+    Registration
+{% endblock %}
 
-                        {% if flag_2 %}
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                Invalid User. Plesae Register inorder to login.
-                            </div>
-                        {% endif %}
 
-                        {% if flag_3 %}
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                Succesfully registered.
-                            </div>
-                        {% endif %}
-                        
-                        <br>
-
-                        <h1>Register/Login</h1>
-                        <p>Please fill the form to create a account.</p>
-                        <p>If you have already registered please login.</p>
-                        <hr>
-
-                        <br>
-                        
-                        <label for = "username"><b>UserName</b></label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username" required>
-
-                        <br>
-                        
-                        <label for = "password"><b>Password</b></label>
-                        <input type = "password" class="form-control" id="password" placeholder = "Enter password" name = "password" required>
-                        
-                        <br>
-                        
-                        <hr>
-                        <!-- <button type="submit" class="registerbtn">Register</button> -->
-                        <button type="submit" class="btn btn-info" name = "action" value="register">Register</button>
-                        <button type="submit" class="btn btn-info" name = "action" value = "login" formaction="{{ url_for ('authentication') }}">Login</button>
-                        
+{% block body %}
+<form action = "{{ url_for('register')}}", method="POST">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                {% if flag %}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        Username already exists. Please login to continue.
                     </div>
-                    <div class="col-sm-4"></div>
-                </div>
+                {% endif %}
+
+                {% if flag_1 %}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        Password doesn't match. Please try again.
+                    </div>
+                {% endif %}
+
+                {% if flag_2 %}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        Invalid User. Plesae Register inorder to login.
+                    </div>
+                {% endif %}
+
+                {% if flag_3 %}
+                    <div class="alert alert-success alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        Succesfully registered.
+                    </div>
+                {% endif %}
+                
+                <br>
+
+                <h1>Register/Login</h1>
+                <p>Please fill the form to create a account.</p>
+                <p>If you have already registered please login.</p>
+                <hr>
+
+                <br>
+                
+                <label for = "username"><b>UserName</b></label>
+                <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username" required>
+
+                <br>
+                
+                <label for = "password"><b>Password</b></label>
+                <input type = "password" class="form-control" id="password" placeholder = "Enter password" name = "password" required>
+                
+                <br>
+                
+                <hr>
+                <!-- <button type="submit" class="registerbtn">Register</button> -->
+                <button type="submit" class="btn btn-info" name = "action" value="register">Register</button>
+                <button type="submit" class="btn btn-info" name = "action" value = "login" formaction="{{ url_for ('authentication') }}">Login</button>
+                
             </div>
-        </form>
-    </body>
-</html>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+</form>
+
+
+{% endblock %}
