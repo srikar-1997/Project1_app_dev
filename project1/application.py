@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import logging
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import exc
+from sqlalchemy import exc, and_, text
 
 
 app = Flask(__name__)
@@ -65,6 +65,7 @@ def authentication():
         name = request.form.get("username")
         pwd = request.form.get("password")
         userobj = Users.query.get(name)
+        # print(Users.query.get("xyz"))
         if userobj:
             if pwd == userobj.password :
                 session["name"] = name
@@ -81,4 +82,52 @@ def authentication():
 def admin():
     users = Users.query.order_by(Users.timestamp).all()
     return render_template("users.html", users = users)
+
+@app.route("/reviewform")
+def reviewform():
+    return render_template("submit.html")
+
+@app.route("/review", methods = ["POST", "GET"])
+def review():
+    name = session["name"]
+    ISBN = "1416949658"
+    if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is None:
+        review = Review(name = name, ISBN_No = ISBN, review_rate = None, review_description = None)
+        db.session.add(review)
+        db.session.commit()
+    if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first():
+        rev = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
+        if rev.flag <= 1 and request.form['action'] != "comment":
+            if request.form['action'] == "1":
+                rev.review_rate = 1
+            elif request.form['action'] == "2":
+                rev.review_rate = 2
+            elif request.form['action'] == "3":
+                rev.review_rate = 3
+            elif request.form['action'] == "4":
+                rev.review_rate = 4
+            elif request.form['action'] == "5":
+                rev.review_rate = 5
+            rev.flag = 1
+            db.session.commit()
+            return render_template("submit.html")
+        if request.form['action'] == "comment" and rev.flag < 2:
+            print (request.form.get("text"))
+            rev.review_description = request.form.get("text")
+            rev.flag = 2
+            db.session.commit()
+            return render_template("submit.html", flag = 1)
+        else:
+            if rev.flag <= 2 :
+                return render_template("submit.html", flag_1 = 1)
+
+    return redirect(url_for("review"))
+        
+# @app.route("submit")
+# def submit:
+#         db.session.add(review)
+#         db.session.commit()
+#         return redirect(url_for('submit'))
+
+
 

@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    home
+{% endblock %}
+
+
+{% block body %}
+    <div class="container" >
+
+        <form action="{{url_for('review')}}", method="POST">
+        
+        {% if flag %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Succesfully rated and commented.
+            </div>
+        {% endif %}
+
+        {% if flag_1 %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Already rated and reviewed.
+            </div>
+        {% endif %}
+
+        <h1>Rating</h1>
+        <button type="submit" class="btn btn-info" name = 'action' value = "1">1</button>
+        <button type="submit" class="btn btn-info" name = 'action' value = "2">2</button>
+        <button type="submit" class="btn btn-info" name = 'action' value = "3">3</button>
+        <button type="submit" class="btn btn-info" name = 'action' value = "4">4</button>
+        <button type="submit" class="btn btn-info" name = 'action' value = "5">5</button>
+        
+        <br>
+        <br>
+
+        <div class="form-group">
+            <label for="comment">Comment:</label>
+            <textarea class="form-control" rows="10" id="comment" name="text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" name = 'action' value = "comment">Submit</button>
+        </form>
+    </div>
+    </body>
+{% endblock %}
