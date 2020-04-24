@@ -27,7 +27,47 @@ def index():
 		return redirect(url_for('register'))
 	elif session['name'] :
 		xyz = Book.query.all()
-		return render_template("home.html", xyz=xyz)
+		return render_template("home.html", xyz=xyz, flag1=1)
+
+@app.route("/search", methods = ["POST"])
+def search():
+		if request.method == 'POST':
+			key = request.form.get('search2')
+			
+			filtered_list1 = Book.query.get(key)
+			if filtered_list1:
+				return render_template("home.html", filtered_list=filtered_list1, flag2=1)
+			else:
+				return render_template("home.html", filtered_list=filtered_list1, flag4=1)
+
+
+			
+			filtered_list = Book.query.filter_by(year = key).all()
+			if filtered_list:
+				if isinstance(filtered_list, list):
+					return render_template("home.html", filtered_list=filtered_list, flag3=1)
+				else:
+					return render_template("home.html", filtered_list=filtered_list, flag2=1)
+			else:
+				return render_template("home.html", filtered_list=filtered_list, flag4=1)
+
+			filtered_list2 = Book.query.filter_by(author = key).all()
+			if filtered_list2:
+				if isinstance(filtered_list2, list):
+					return render_template("home.html", filtered_list=filtered_list2, flag3=1)
+				else:
+					return render_template("home.html", filtered_list=filtered_list2, flag2=1)
+			else:
+				return render_template("home.html", filtered_list=filtered_list2, flag4=1)
+
+			filtered_list3 = Book.query.filter_by(title = key).all()
+			if filtered_list3:
+				if isinstance(filtered_list3, list):
+					return render_template("home.html", filtered_list=filtered_list3, flag3=1)
+				else:
+					return render_template("home.html", filtered_list=filtered_list3, flag2=1)
+			else:
+				return render_template("home.html", filtered_list=filtered_list3, flag4=1)
 	
 
 @app.route("/logout")

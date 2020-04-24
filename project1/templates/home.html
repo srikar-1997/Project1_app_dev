@@ -2,64 +2,175 @@
 	<html>
 		<head>
 			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<link rel = "stylesheet" href = "homeStyles.css" type = "text/css"/>
+			<!-- <link rel = "stylesheet" href = "homeStyles.css" type = "text/css"/> -->
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-		    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>     
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>     
 			<header>Search Books</header>
+			<style type="text/css">
+				header {
+					padding : 10px;
+					color: white;
+					background-color :  grey;
+					text-align : center;
+					display: block;
+					width:auto;
+					height:auto;
+					font-size:50px;
+				}
+
+				body {
+					margin: 0;
+					font-family: Arial, Helvetica, sans-serif;
+				}
+
+
+				nav
+				{
+					width:auto;
+					height:auto;
+				}
+				.container{
+					background-color:#87CEFA;
+					height:auto;
+					width:auto;
+				}
+
+				.text-left{
+					padding-left:200px;
+				}
+				.col{
+					padding: 10px;
+				}
+				.p{
+					padding-left:200px;
+				}
+				.h1{
+					padding: 200px;
+				}
+			</style>
 		</head>
 		<body>
 			<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="active" href="#home">Home</a>
-			<form class="example" action="/action_page.php" style="margin:auto;max-width:300px">
-				<select id="Keyword" name="Choose field">
-					<option value="ISBN">ISBN</option>
-					<option value="title">title</option>
-					<option value="author">author</option>
-					<option value="year">year</option>
-				</select> -->
-		    <input type="text" placeholder="Search.." name="search2">
+			<!-- <a class="active" href="#home">Home</a> -->
+			<form class="example" action="{{url_for('search')}}", method="POST" style="margin:auto;max-width:300px">
+				
+			<!-- <button class="btn btn-success float-right" type="submit" style="height:40px;">Submit</button> -->
+			<input type="submit" name="submit" value="submit">
+			<input type="text" placeholder="Search.." name="search2">
 			</form>           
-			<button class="btn btn-success float-right" type="submit" style="height:40px;">Logout</button>
+			<form class="form-inline" action="{{ url_for('logout') }}">
+            	<button class="btn btn-success" type="submit">Logout</button>
+            </form>
 
 
 			</nav><br><br>
 			<!--start for block here-->
-			{% for i in xyz %}
+			{%if flag1%}
+				{% for i in xyz %}
 			<div class="container">
 			   <div class="row">
-			    <div class="col">
+				<div class="col">
 				<p>{{i.ISBN}}</p>
-			    </div>
+				</div>
 				<div class="col">
-			    </div>
-				<div class="col">
-			    </div>
+				</div>
 				<div class="col">
 				<p>{{i.title}}</p>
-			    </div>
+				</div>
 			</div>
 			<div class="row">
-			    <div class="col">
+				<div class="col">
 				<p>{{i.author}}</p>
-			    </div>
+				</div>
 				<div class="col">
-			    </div>
-				<div class="col">
-			    </div>
+				</div>
 				<div class="col">
 				<p>{{i.year}}</p>
-			    </div>
+				</div>
 			</div>
 
-			</div><br>
-			<div class="text-left">
-			    <a href="#" class="btn btn-primary">View Book</a>
 			</div>
-		            {% endfor %}
+				<br>
+			<div class="text-left">
+				<a href="#" class="btn btn-primary">View Book</a>
+			</div><br><br>
+					{% endfor %}
+			{%endif%}
+			{%if flag2 %}
+
+			<div class="container">
+			    <div class="row">
+				<div class="col">
+				<p>{{filtered_list.ISBN}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{filtered_list.title}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				<p>{{filtered_list.author}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{filtered_list.year}}</p>
+				</div>
+			</div>
+
+			</div>
+				<br>
+			<div class="text-left">
+				<a href="#" class="btn btn-primary">View Book</a>
+			</div><br><br>
+			{%endif%}
+
+
+
+
+			{%if flag3 %}
+				{%for k in filtered_list%}
+			<div class="container">
+			    <div class="row">
+				<div class="col">
+				<p>{{k.ISBN}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{k.title}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				<p>{{k.author}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{k.year}}</p>
+				</div>
+			</div>
+
+			</div>
+				<br>
+			<div class="text-left">
+				<a href="#" class="btn btn-primary">View Book</a>
+			</div><br><br>
+			{%endfor%}
+			{%endif%}
+
+
+			{%if flag4 %}
+				<h1>No books </h1>
+			{%endif%}			
 		<!--end for block here-->
 
 		</body>
 	</html>
+
