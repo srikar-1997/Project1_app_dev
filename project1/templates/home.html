@@ -1,14 +1,65 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel = "stylesheet" href = "homeStyles.css" type = "text/css"/>
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>     
+			<header>Search Books</header>
+		</head>
+		<body>
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<a class="active" href="#home">Home</a>
+			<form class="example" action="/action_page.php" style="margin:auto;max-width:300px">
+				<select id="Keyword" name="Choose field">
+					<option value="ISBN">ISBN</option>
+					<option value="title">title</option>
+					<option value="author">author</option>
+					<option value="year">year</option>
+				</select> -->
+		    <input type="text" placeholder="Search.." name="search2">
+			</form>           
+			<button class="btn btn-success float-right" type="submit" style="height:40px;">Logout</button>
 
-{% block title %}
-    home
-{% endblock %}
 
+			</nav><br><br>
+			<!--start for block here-->
+			{% for i in xyz %}
+			<div class="container">
+			   <div class="row">
+			    <div class="col">
+				<p>{{i.ISBN}}</p>
+			    </div>
+				<div class="col">
+			    </div>
+				<div class="col">
+			    </div>
+				<div class="col">
+				<p>{{i.title}}</p>
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col">
+				<p>{{i.author}}</p>
+			    </div>
+				<div class="col">
+			    </div>
+				<div class="col">
+			    </div>
+				<div class="col">
+				<p>{{i.year}}</p>
+			    </div>
+			</div>
 
-{% block body %}
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <form class="form-inline" action="{{ url_for('logout') }}">
-            <button class="btn btn-success" type="submit">Logout</button>
-          </form>
-    </nav>
-{% endblock %}
+			</div><br>
+			<div class="text-left">
+			    <a href="#" class="btn btn-primary">View Book</a>
+			</div>
+		            {% endfor %}
+		<!--end for block here-->
+
+		</body>
+	</html>
