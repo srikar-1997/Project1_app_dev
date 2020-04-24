@@ -92,39 +92,40 @@ def review():
     name = session["name"]
     ISBN = "1416949658"
     if request.method == "GET":
-        if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is None:
-            review = Review(name = name, ISBN_No = ISBN, review_rate = None, review_description = None)
-            db.session.add(review)
-            db.session.commit()
-        return render_template("submit.html")
-    
-    else:
+        isb = Review.query.filter_by(ISBN_No = ISBN).all()
         rev = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
         if rev and rev.flag == 2 :
             rate = rev.review_rate
             comm = rev.review_description
-            return render_template("submit.html", sub_flag = 1, rate = rate, comm = comm)
-
-        elif rev and rev.flag <= 2:
-            if rev.flag <= 1 and request.form['action'] != "comment":
-                if request.form['action'] == "1":
-                    rev.review_rate = 1
-                elif request.form['action'] == "2":
-                    rev.review_rate = 2
-                elif request.form['action'] == "3":
-                    rev.review_rate = 3
-                elif request.form['action'] == "4":
-                    rev.review_rate = 4
-                elif request.form['action'] == "5":
-                    rev.review_rate = 5
-                db.session.commit()
-                return render_template("submit.html", sub_flag_1 = 1)
-            if request.form['action'] == "comment" and rev.flag < 2:
-                print (request.form.get("text"))
-                rev.review_description = request.form.get("text")
-                rev.flag = 2
-                db.session.commit()
-                return render_template("submit.html", flag = 1, sub_flag = 1)
+            return render_template("submit.html", sub_flag = 1, rate = rate, comm = comm, isb = isb)
+        return render_template("submit.html", sub_flag_1 = 1, isb = isb)
+    
+    else:
+        isb = Review.query.filter_by(ISBN_No = ISBN).all()
+        rev = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
+        if request.form['action'] != "comment":
+            if rev is None:
+                rev = Review(name = name, ISBN_No = ISBN, review_rate = None, review_description = None)
+                db.session.add(rev)
+            if request.form['action'] == "1":
+                rev.review_rate = 1
+            elif request.form['action'] == "2":
+                rev.review_rate = 2
+            elif request.form['action'] == "3":
+                rev.review_rate = 3
+            elif request.form['action'] == "4":
+                rev.review_rate = 4
+            elif request.form['action'] == "5":
+                rev.review_rate = 5
+            db.session.commit()
+            return render_template("submit.html", sub_flag_1 = 1, isb = isb)
+        if request.form['action'] == "comment" and rev.flag < 2:
+            print (request.form.get("text"))
+            rev.review_description = request.form.get("text")
+            rev.flag = 2
+            db.session.commit()
+                # return render_template("submit.html", flag = 1, sub_flag_1 = 1)
+            return redirect(url_for('review'))
 
     return redirect(url_for("review"))
         
