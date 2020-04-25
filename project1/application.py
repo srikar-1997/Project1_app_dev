@@ -90,7 +90,7 @@ def book_details(ISBN):
     if request.method == "GET":
         isb = Review.query.filter_by(ISBN_No = ISBN).all()
         rev = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
-        if rev and rev.flag == 2 :
+        if rev and rev.review_rate is not None and rev.review_description is not None :
             return render_template("submit.html", sub_flag = 1, rate = rev.review_rate, comm = rev.review_description, isb = isb)
         return render_template("submit.html", isb = isb, ISBN = ISBN)
 
@@ -118,9 +118,8 @@ def review(ISBN):
             rev.review_rate = 5
         db.session.commit()
         return render_template("submit.html", isb = isb, ISBN = ISBN)
-    if request.form['action'] == "comment" and rev.flag < 2:
+    if request.form['action'] == "comment":
         rev.review_description = request.form.get("text")
-        rev.flag = 2
         db.session.commit()
                 # return render_template("submit.html", flag = 1, sub_flag_1 = 1)
         return redirect(url_for('review', ISBN = ISBN))

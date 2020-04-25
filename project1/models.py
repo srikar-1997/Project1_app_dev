@@ -34,7 +34,6 @@ class Review(db.Model) :
     ISBN_No = db.Column(db.String, db.ForeignKey('books.ISBN'))
     review_rate = db.Column(db.Integer)
     review_description = db.Column(db.String)
-    flag = db.Column(db.Integer, default = 0)
 
     def __init__ (self, name, ISBN_No, review_rate, review_description) :
         self.name = name
