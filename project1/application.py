@@ -46,7 +46,7 @@ def register():
         time_stamp = datetime.datetime.now()
         reg = Users(username = name, password = pwd, timestamp = time_stamp)
         try:
-            
+
             db.session.add(reg)
             db.session.commit()
             return render_template("Registration.html", flag_3 = 1)
@@ -81,4 +81,10 @@ def authentication():
 def admin():
     users = Users.query.order_by(Users.timestamp).all()
     return render_template("users.html", users = users)
+
+@app.route("/book/<String:ISBN>",methods = ["GET"])
+def book_details(ISBN):
+    if request.method == "GET":
+        Book_obj = Book.query.get(ISBN)
+        return render_template("bookpage.html",Bookobject = Book_obj)
 
