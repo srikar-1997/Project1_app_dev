@@ -95,7 +95,7 @@
 			</div>
 				<br>
 			<div class="text-left">
-				<a href="#" class="btn btn-primary">View Book</a>
+				<a href="/book/{{i.ISBN}}" class="btn btn-primary">View Book</a>
 			</div><br><br>
 					{% endfor %}
 			{%endif%}
@@ -126,7 +126,7 @@
 			</div>
 				<br>
 			<div class="text-left">
-				<a href="#" class="btn btn-primary">View Book</a>
+				<a href="/book/{{filtered_list.ISBN}}" class="btn btn-primary">View Book</a>
 			</div><br><br>
 			{%endif%}
 
@@ -160,14 +160,14 @@
 			</div>
 				<br>
 			<div class="text-left">
-				<a href="#" class="btn btn-primary">View Book</a>
+				<a href="/book/{{k.ISBN}}" class="btn btn-primary">View Book</a>
 			</div><br><br>
 			{%endfor%}
 			{%endif%}
 
 
 			{%if flag4 %}
-				<h1>No books </h1>
+				<h1>No Such book exists</h1>
 			{%endif%}			
 		<!--end for block here-->
 

@@ -33,41 +33,47 @@ def index():
 def search():
 		if request.method == 'POST':
 			key = request.form.get('search2')
-			
+			search_list = []
 			filtered_list1 = Book.query.get(key)
 			if filtered_list1:
+				search_list.append(2)
 				return render_template("home.html", filtered_list=filtered_list1, flag2=1)
-			else:
-				return render_template("home.html", filtered_list=filtered_list1, flag4=1)
+			# else:
+			# 	return render_template("home.html", filtered_list=filtered_list1, flag4=1)
 
 
 			
 			filtered_list = Book.query.filter_by(year = key).all()
 			if filtered_list:
+				search_list.append(3)
 				if isinstance(filtered_list, list):
 					return render_template("home.html", filtered_list=filtered_list, flag3=1)
 				else:
 					return render_template("home.html", filtered_list=filtered_list, flag2=1)
-			else:
-				return render_template("home.html", filtered_list=filtered_list, flag4=1)
+			# else:
+			# 	return render_template("home.html", filtered_list=filtered_list, flag4=1)
 
 			filtered_list2 = Book.query.filter_by(author = key).all()
 			if filtered_list2:
+				search_list.append(4)
 				if isinstance(filtered_list2, list):
 					return render_template("home.html", filtered_list=filtered_list2, flag3=1)
 				else:
 					return render_template("home.html", filtered_list=filtered_list2, flag2=1)
-			else:
-				return render_template("home.html", filtered_list=filtered_list2, flag4=1)
+			# else:
+			# 	return render_template("home.html", filtered_list=filtered_list2, flag4=1)
 
 			filtered_list3 = Book.query.filter_by(title = key).all()
 			if filtered_list3:
+				search_list.append(5)
 				if isinstance(filtered_list3, list):
 					return render_template("home.html", filtered_list=filtered_list3, flag3=1)
 				else:
 					return render_template("home.html", filtered_list=filtered_list3, flag2=1)
-			else:
+			# else:
+			if not search_list:
 				return render_template("home.html", filtered_list=filtered_list3, flag4=1)
+				
 	
 
 @app.route("/logout")
