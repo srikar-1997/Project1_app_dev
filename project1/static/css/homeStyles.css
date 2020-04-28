@@ -1,0 +1,40 @@
+header {
+          padding : 10px;
+          color: white;
+          background-color :  grey;
+          text-align : center;
+          display: block;
+          width:auto;
+          height:auto;
+          font-size:50px;
+        }
+
+        body {
+          margin: 0;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        nav
+        {
+          width:auto;
+          height:auto;
+        }
+        .container{
+          background-color:#87CEFA;
+          height:auto;
+          width:auto;
+        }
+
+        .text-left{
+          padding-left:200px;
+        }
+        .col{
+          padding: 10px;
+        }
+        .p{
+          padding-left:200px;
+        }
+        .h1{
+          padding: 200px;
+        }
