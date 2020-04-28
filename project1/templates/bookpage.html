@@ -1,32 +1,45 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    home
+    Details of the Book
 {% endblock %}
 
 
 {% block body %}
+<div class="container">
+    <div class="card bg-warning text-black">
+        <div class="card-body">
+            <h3>Title : {{Bookobject.title}}</h3>
+            <h3>Author : {{Bookobject.author}}</h3>
+            <h3>ISBN : {{Bookobject.ISBN}}</h3>
+            <h3>Published year : {{Bookobject.year}}</h3>
+        </div>
+    </div>
+</div>
 <div class="container" >
+    {% if isb_flag  %}
     <div class="card bg-primary text-white">
         <div class="card-body">
+            <h4>Ratings and comments</h4>
             {%for i in isb %}
-                <p>{{ i.name }} rated {{i.review_rate}}</p>
+                <p>{{ i.name }} rated--------- {{i.review_rate}}</p>
+                <p>{{ i.name }} commented---------- {{i.review_description}}</p>
             {% endfor %}
         </div>
       </div>
+    {% endif %}
 </div>
     {% if sub_flag %}
         <div class="container" >
             <div class="card bg-danger text-white">
                 <div class="card-body">
-                    <p> your rating = {{ rate }} </p>
-                    <p> your comment = {{comm}} </p>
+                    <h5>Please see your rating and comment in Ratings and comment section.</h5>
                 </div>
             </div>
         </div>
     {% else %}
     <div class="container" >
-        <form action="{{url_for('review', ISBN = ISBN)}}", method="POST">
+        <form action="{{url_for('review', ISBN = Bookobject.ISBN)}}", method="POST">
             {% if flag %}
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
