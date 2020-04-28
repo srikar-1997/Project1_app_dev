@@ -6,10 +6,72 @@
 
 
 {% block body %}
-    <div class="container">
-        <h3>Title : {{Book_obj.title}}</h3>
-        <h3>Author : {{Book_obj.author}}</h3>
-        <h3>ISBN : {{Book_obj.ISBN}}</h3>
-        <h3>Published year : {{Book_obj.year}}</h3>
+<div class="container">
+    <div class="card bg-warning text-black">
+        <div class="card-body">
+            <h3>Title : {{Bookobject.title}}</h3>
+            <h3>Author : {{Bookobject.author}}</h3>
+            <h3>ISBN : {{Bookobject.ISBN}}</h3>
+            <h3>Published year : {{Bookobject.year}}</h3>
+        </div>
+    </div>
+</div>
+<div class="container" >
+    {% if isb_flag  %}
+    <div class="card bg-primary text-white">
+        <div class="card-body">
+            <h4>Ratings and comments</h4>
+            {%for i in isb %}
+                <p>{{ i.name }} rated--------- {{i.review_rate}}</p>
+                <p>{{ i.name }} commented---------- {{i.review_description}}</p>
+            {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+</div>
+    {% if sub_flag %}
+        <div class="container" >
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5>Please see your rating and comment in Ratings and comment section.</h5>
+                </div>
+            </div>
+        </div>
+    {% else %}
+    <div class="container" >
+        <form action="{{url_for('review', ISBN = Bookobject.ISBN)}}", method="POST">
+            {% if flag %}
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    Succesfully rated and commented.
+                </div>
+            {% endif %}
+
+            {% if flag_1 %}
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    Already rated and reviewed.
+                </div>
+            {% endif %}
+
+            <h1>Rating</h1>
+            <button type="submit" class="btn btn-info" name = 'action' value = "1">1</button>
+            <button type="submit" class="btn btn-info" name = 'action' value = "2">2</button>
+            <button type="submit" class="btn btn-info" name = 'action' value = "3">3</button>
+            <button type="submit" class="btn btn-info" name = 'action' value = "4">4</button>
+            <button type="submit" class="btn btn-info" name = 'action' value = "5">5</button>
+            
+            <br>
+            <br>
+
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" rows="10" id="comment" name="text"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" name = 'action' value = "comment">Submit</button>
+        </form>
+    </div>
+    {% endif %}
+        
     </div>
 {% endblock %}
