@@ -102,3 +102,9 @@ def admin():
 	users = Users.query.order_by(Users.timestamp).all()
 	return render_template("users.html", users = users)
 
+@app.route("/book/<String:ISBN>",methods = ["GET"])
+def book_details(ISBN):
+    if request.method == "GET":
+        Book_obj = Book.query.get(ISBN)
+        return render_template("bookpage.html",Bookobject = Book_obj)
+
