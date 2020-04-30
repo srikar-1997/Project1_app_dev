@@ -1,14 +1,135 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+	<html>
+		<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel = "stylesheet" href = {{url_for('static', filename='css/homeStyles.css')}} type = "text/css"/>
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>     
+			<header>Search Books</header>
 
-{% block title %}
-    home
-{% endblock %}
+		</head>
+		<body>
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+			<!-- <a class="active" href="#home">Home</a> -->
+			<form class="example" action="{{url_for('search')}}", method="POST" style="margin:auto;max-width:300px">
+				
+			<!-- <button class="btn btn-success float-right" type="submit" style="height:40px;">Submit</button> -->
+			<input type="submit" name="submit" value="submit">
+			<input type="text" placeholder="Search.." name="search2">
+			</form>           
+			<form class="form-inline" action="{{ url_for('logout') }}">
+            	<button class="btn btn-success" type="submit">Logout</button>
+            </form>
 
 
-{% block body %}
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <form class="form-inline" action="{{ url_for('logout') }}">
-            <button class="btn btn-success" type="submit">Logout</button>
-          </form>
-    </nav>
-{% endblock %}
+			</nav><br><br>
+			<!--start for block here-->
+			{%if flag1%}
+				{% for i in xyz %}
+			<div class="container">
+			   <div class="row">
+				<div class="col">
+				<p>{{i.ISBN}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{i.title}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				<p>{{i.author}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{i.year}}</p>
+				</div>
+			</div>
+
+			</div>
+				<br>
+			<div class="text-left">
+				<a href="/book/{{i.ISBN}}" class="btn btn-primary">View Book</a>
+			</div><br><br>
+					{% endfor %}
+			{%endif%}
+			{%if flag2 %}
+
+			<div class="container">
+			    <div class="row">
+				<div class="col">
+				<p>{{filtered_list.ISBN}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{filtered_list.title}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				<p>{{filtered_list.author}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{filtered_list.year}}</p>
+				</div>
+			</div>
+
+			</div>
+				<br>
+			<div class="text-left">
+				<a href="/book/{{filtered_list.ISBN}}" class="btn btn-primary">View Book</a>
+			</div><br><br>
+			{%endif%}
+
+
+
+
+			{%if flag3 %}
+				{%for k in filtered_list%}
+			<div class="container">
+			    <div class="row">
+				<div class="col">
+				<p>{{k.ISBN}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{k.title}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				<p>{{k.author}}</p>
+				</div>
+				<div class="col">
+				</div>
+				<div class="col">
+				<p>{{k.year}}</p>
+				</div>
+			</div>
+
+			</div>
+				<br>
+			<div class="text-left">
+				<a href="/book/{{k.ISBN}}" class="btn btn-primary">View Book</a>
+			</div><br><br>
+			{%endfor%}
+			{%endif%}
+
+
+			{%if flag4 %}
+				<h1>No Such book exists</h1>
+			{%endif%}			
+		<!--end for block here-->
+
+		</body>
+	</html>
+
