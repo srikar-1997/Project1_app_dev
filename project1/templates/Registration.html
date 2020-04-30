@@ -50,19 +50,24 @@
             });
             function validate(inp) {
                 if (inp.match(/(.+)@(.+){2,}\.(.+){2,}/)) {
+                    document.querySelector('#al-msg').innerHTML = ""
                     return true;
                 } else {
-                    alert("please enter a valid email address!");    //The pop up alert for a valid email address
+                    //alert("please enter a valid email address!");    //The pop up alert for a valid email address
+                    document.querySelector('#al-msg').innerHTML = "please give a valid email."
                     return false;
                 }
             }
 
             function valpass(inp) {
                 if (inp.length >= 6 && inp.match(/[A-Z]/) && inp.match(/[a-z]/) && inp.match(/[0-9]/) && inp.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/)) {
+                    document.querySelector('#al-msg1').innerHTML = ""
                     return true
                 } else {
-                    alert("please enter a valid password in which it should consist of one upper case letter, one lower case letter," + 
-                    "one number, one special character and min length should be 6 chars");    //The pop up alert for a valid email address
+                    // alert("please enter a valid password in which it should consist of one upper case letter, one lower case letter," + 
+                    // "one number, one special character and min length should be 6 chars");    //The pop up alert for a valid email address
+                    document.querySelector('#al-msg').innerHTML = "please enter a valid password in which it should consist of one upper case letter, one lower case letter," + 
+                    "one number, one special character and min length should be 6 chars"
                     return false;
                 }
             }
@@ -124,6 +129,9 @@
                         <br>
 
                         <p id="al-msg">
+                        </p>
+
+                        <p id="al-msg1">
                         </p>
                         
                         <hr>
