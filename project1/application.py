@@ -3,7 +3,7 @@ import datetime
 import bcrypt
 from models import *
 
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for, jsonify
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -21,13 +21,15 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 @app.route("/")
 def index():
     if 'name' not in session :
         return redirect(url_for('register'))
     elif session['name'] :
-        xyz = Book.query.all()
-        return render_template("home.html", xyz=xyz, flag1=1)
+        # xyz = Book.query.all()
+        # return render_template("home.html", xyz=xyz, flag1=1)
+        return render_template("newhome.html")
 
 @app.route("/search", methods = ["POST"])
 def search():
@@ -88,6 +90,7 @@ def authentication():
         if userobj:
             if pwd == userobj.password :
                 session["name"] = name
+                print(session["name"])
                 return redirect(url_for('index'))
             else :
                 return render_template("Registration.html", flag_1= 1)
@@ -128,10 +131,10 @@ def review(ISBN):
     # ISBN = "1416949658"
     isb = Review.query.filter_by(ISBN_No = ISBN).all()
     rev = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
-    if request.form['action'] != "comment":
-        if rev is None:
-            rev = Review(name = name, ISBN_No = ISBN, review_rate = None, review_description = None)
-            db.session.add(rev)
+    #if request.form['action'] != "comment":
+    if rev is None:
+        rev = Review(name = name, ISBN_No = ISBN, review_rate = None, review_description = None)
+        db.session.add(rev)
         if request.form['action'] == "1":
             rev.review_rate = 1
         elif request.form['action'] == "2":
@@ -151,3 +154,58 @@ def review(ISBN):
         return redirect(url_for('book_details', ISBN = ISBN))
 
     return redirect(url_for('book_details', ISBN = ISBN))
+
+@app.route("/api/submit_review", methods = ["POST"])
+def review_api():
+    data = request.get_json()
+    name = session["name"]
+    ISBN = "1416949658"
+    rate = request.form.get('rate')
+    comment = request.form.get("comment")
+    print(name, ISBN, rate, comment)
+    if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is None:
+        rev = Review(name = name, ISBN_No = ISBN, review_rate = rate, review_description = comment)
+        db.session.add(rev)
+        db.session.commit()
+        return jsonify({"success": True, "info" : "successfully added", "status":"200"})
+    elif Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is not None:
+        return jsonify({"success": False, "info": "already rated and commented", "status":"400"})
+    else:
+        return jsonify({"success": False})
+
+
+@app.route("/api/search", methods = ["POST", "GET"])
+def search_api():
+    data = request.get_json()
+    key = data["key"]
+    key = key.title()
+    key = "%"+key+"%"
+    dbooks = {"books":[]}
+    filtered_list1 = Book.query.filter(or_(Book.ISBN.like(key), Book.year.like(key), Book.author.like(key), Book.title.like(key))).all()
+    if filtered_list1:
+        if isinstance(filtered_list1, list):
+            for i in filtered_list1:
+                dic = dict()
+                dic["ISBN"] = i.ISBN
+                dic["Title"] = i.title
+                dic["Author"] = i.author
+                dic["Year"] = i.year
+                dbooks["books"].append(dic)
+            return jsonify(dbooks)
+                
+        else :
+            return jsonify({"ISBN": filtered_list1.ISBN,"Title": filtered_list1.title, "Author": filtered_list1.author, "year": filtered_list1.year})
+    
+    return jsonify({"error": "No Books"}), 400
+
+@app.route("/api/bookpage", methods = ["POST", "GET"])
+def bookpage_api():
+    data = request.get_json()
+    ISBN = data["ISBN"]
+    Book_obj = Book.query.get(ISBN)
+    dic = dict()
+    dic["ISBN"] = Book_obj.ISBN
+    dic["Title"] = Book_obj.title
+    dic["Author"] = Book_obj.author
+    dic["Year"] = Book_obj.year
+    return jsonify(dic)
