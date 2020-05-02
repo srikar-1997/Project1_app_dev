@@ -162,7 +162,6 @@ def review_api():
     ISBN = "1416949658"
     rate = request.form.get('rate')
     comment = request.form.get("comment")
-    print(name, ISBN, rate, comment)
     if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is None:
         rev = Review(name = name, ISBN_No = ISBN, review_rate = rate, review_description = comment)
         db.session.add(rev)

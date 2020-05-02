@@ -10,11 +10,17 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
-                
-
                 document.querySelector('#review').onsubmit = () => {
+                    var rate = "";
 
-                    
+                    var x = document.getElementsByName("rating")
+
+                    for (let i = 0; i < x.length; i++) {
+                        if (x[i].checked === true) {
+                            rate = x[i].value
+                        }
+                    }
+
                     // Initialize new request
                     const request = new XMLHttpRequest();
                     const comment = document.querySelector('#comment').value;
@@ -40,17 +46,16 @@
                         }
                     }
                     
-
-
                     // Add data to send with request
                     const data = new FormData();
+                    data.append('rate', rate)
                     data.append('comment', comment);
+                    
 
                     // Send request
                     request.send(data);
                     return false;
             };
-
             });
         </script>   
     </head>
@@ -70,18 +75,18 @@
                 <div class="col-sm-6">
                     <div class="container" >
                         <form id = "review">
-                
                             <h1>Rating</h1>
-                            <button data-rate = "1" class="btn btn-info" id = "one" >1</button>
-                            <button type="submit" class="btn btn-info" id = "2">2</button>
-                            <button type="submit" class="btn btn-info" id = "3">3</button>
-                            <button type="submit" class="btn btn-info" id = "4">4</button>
-                            <button type="submit" class="btn btn-info" id = "5">5</button>
+                            <input name = "rating" value = "1" id = "1"  type="radio" />1
+                            <input name = "rating" value = "2" id = "2"  type="radio" />2
+                            <input name = "rating" value = "3" id = "3"  type="radio" />3
+                            <input name = "rating" value = "4" id = "4"  type="radio" />4
+                            <input name = "rating" value = "5" id = "5"  type="radio" />5
+                            
                             <br>
                             <br>
                             <div class="form-group">
                                 <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="5" id="comment" name="text"></textarea>
+                                <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
                             </div>
                             <button id = "sub" type="submit" class="btn btn-primary" name = 'action' value = "comment">Submit</button>
                         </form>
