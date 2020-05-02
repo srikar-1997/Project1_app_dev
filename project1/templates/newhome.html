@@ -12,26 +12,21 @@
 
                 document.querySelector('#review').onsubmit = () => {
                     var rate = "";
-
+                    document.querySelector('#result').innerHTML = ""
                     var x = document.getElementsByName("rating")
-
                     for (let i = 0; i < x.length; i++) {
                         if (x[i].checked === true) {
                             rate = x[i].value
                         }
                     }
-
                     // Initialize new request
                     const request = new XMLHttpRequest();
                     const comment = document.querySelector('#comment').value;
                     request.open('POST', '/api/submit_review');
-
                     // Callback function for when request completes
                     request.onload = () => {
-
                         // Extract JSON data from request
                         const data = JSON.parse(request.responseText);
-
                         // Update the result div
                         if (data.status === "200") {
                             const contents = ` ${data.info} `
@@ -44,19 +39,32 @@
                         else {
                             document.querySelector('#result').innerHTML = 'There was an error.';
                         }
+                        document.querySelector('#review').innerHTML = ""
                     }
-                    
                     // Add data to send with request
                     const data = new FormData();
                     data.append('rate', rate)
                     data.append('comment', comment);
-                    
-
                     // Send request
                     request.send(data);
                     return false;
             };
             });
+
+            function secpage() {
+                document.querySelector('#review').innerHTML = '<h1>Rating</h1>' +
+                            '<input name = "rating" value = "1" id = "1"  type="radio" />1 '+ 
+                            '<input name = "rating" value = "2" id = "2"  type="radio" />2 ' +
+                            '<input name = "rating" value = "3" id = "3"  type="radio" />3 ' +
+                            '<input name = "rating" value = "4" id = "4"  type="radio" />4 ' +
+                            '<input name = "rating" value = "5" id = "5"  type="radio" />5 ' +
+                            '<div class="form-group"> ' +
+                                '<label for="comment">Comment:</label> ' +
+                                '<textarea class="form-control" rows="3" id="comment" name="text"></textarea> ' +
+                            '</div> ' +
+                            '<button id = "sub" type="submit" class="btn btn-primary" name = "action" value = "comment">Submit</button> ' +
+                        '</form> </div> '
+            }
         </script>   
     </head>
     <body>
@@ -71,30 +79,13 @@
         </nav>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6"></div>
                 <div class="col-sm-6">
-                    <div class="container" >
-                        <form id = "review">
-                            <h1>Rating</h1>
-                            <input name = "rating" value = "1" id = "1"  type="radio" />1
-                            <input name = "rating" value = "2" id = "2"  type="radio" />2
-                            <input name = "rating" value = "3" id = "3"  type="radio" />3
-                            <input name = "rating" value = "4" id = "4"  type="radio" />4
-                            <input name = "rating" value = "5" id = "5"  type="radio" />5
-                            
-                            <br>
-                            <br>
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea class="form-control" rows="3" id="comment" name="text"></textarea>
-                            </div>
-                            <button id = "sub" type="submit" class="btn btn-primary" name = 'action' value = "comment">Submit</button>
-                        </form>
-
-                        <div id="result"></div>
-
-                    </div>
+                    <button class="btn btn-success" onclick="secpage()">View book</button>
                 </div>
+                <div class="col-sm-6" id = "sec">
+                    <div class = container>
+                        <form id = "review"></form>
+                <div id="result"></div>
             </div>
         </div>
     </body>

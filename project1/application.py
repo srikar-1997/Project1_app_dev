@@ -166,9 +166,7 @@ def review_api():
         rev = Review(name = name, ISBN_No = ISBN, review_rate = rate, review_description = comment)
         db.session.add(rev)
         db.session.commit()
-        return jsonify({"success": True, "info" : "successfully added", "status":"200"})
-    elif Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is not None:
-        return jsonify({"success": False, "info": "already rated and commented", "status":"400"})
+        return jsonify({"success": True, "info" : "please see your rating and comment in above section", "status":"200"})
     else:
         return jsonify({"success": False})
 
