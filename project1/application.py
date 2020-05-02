@@ -3,7 +3,7 @@ import datetime
 import bcrypt
 from models import *
 
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, jsonify, session, render_template, request, redirect, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -20,6 +20,32 @@ db.init_app(app)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+
+@app.route("/api/search")
+def searchApi():
+    data = request.get_json()
+    key = data["key"]
+    key = key.title()
+    key = "%"+key+"%"
+    api_search = Book.query.filter(or_(Book.ISBN.like(key), Book.year.like(key), Book.author.like(key), Book.title.like(key))).all()
+    dbooks = {"books":[]}
+    if api_search:
+        if isinstance(api_search, list):
+            for i in api_search:
+                dic = dict()
+                dic["ISBN"] = i.ISBN
+                dic["Title"] = i.title
+                dic["Author"] = i.author
+                dic["Year"] = i.year
+                dbooks["books"].append(dic)
+            return jsonify(dbooks)
+                
+        else :
+            return jsonify({"ISBN": api_search.ISBN,"Title": api_search.title, "Author": api_search.author, "year": api_search.year})
+    
+    return jsonify({"error": "No Books"}), 400
+
 
 @app.route("/")
 def index():
