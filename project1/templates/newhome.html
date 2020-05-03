@@ -10,6 +10,67 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
 
+                document.querySelector('#search').onsubmit = () => {
+                    // Initialize new request
+                    const request = new XMLHttpRequest();
+                    const key = document.querySelector('#searchinp').value;
+                    request.open('POST', '/api/search');
+                    // Callback function for when request completes
+                    request.onload = () => {
+                        // Extract JSON data from request
+                        const data = JSON.parse(request.responseText);
+                        let info = '<h1>searchresults</h1><br>';
+                        // Update the result div
+                        if (data.success) {
+                            for (let i = 0; i < data.books.length; i++) {
+                                 info += `<div class="card"> ` +
+                                `<div class="card-body"><h3>${data.books[i].Title}</h3> <br>` +
+                                `${data.books[i].ISBN} <br>`+
+                                `${data.books[i].Author} <br>`+
+                                `${data.books[i].Year} <br>` +
+                                '<button class="btn btn-success" name = '+data.books[i].ISBN+' onclick = bookpage(this) >viewBook</button>'+
+                                `</div> </div>`
+                            }
+                            document.querySelector('#result1').innerHTML = info
+                            
+                        }
+                    }
+                    // Add data to send with request
+                    const data = new FormData();
+                    data.append('key', key)
+                    // Send request
+                    request.send(data);
+                    return false;
+                };
+                });
+
+                function bookpage(elem) {
+                    
+                    const request = new XMLHttpRequest();
+                    const ISBN = elem.getAttribute("name")
+                    request.open('POST', '/api/bookpage');
+                    request.onload = () => { 
+                        const data = JSON.parse(request.responseText);
+
+                        if (data.success) {
+
+                            document.querySelector('#bookpage').innerHTML = ` <div class="card"> ` +
+                                `<div class="card-body"> Title -- ${data.Title} <br> ISBN -- ${data.ISBN}  <br> Author -- ${data.Author} 
+                                <br> Year -- ${data.Year}</div> </div> `
+
+                        }
+
+                    }
+                    const data = new FormData();
+                    data.append('ISBN', ISBN)
+                    // Send request
+                    request.send(data);
+                    return false;
+
+                }
+
+            document.addEventListener('DOMContentLoaded', () => {
+
                 document.querySelector('#review').onsubmit = () => {
                     var rate = "";
                     document.querySelector('#result').innerHTML = ""
@@ -29,17 +90,17 @@
                         const data = JSON.parse(request.responseText);
                         // Update the result div
                         if (data.status === "200") {
-                            const contents = ` ${data.info} `
+                            const contents = ` Your rating --  ${data.rate} your comment -- ${data.comment} `
                             document.querySelector('#result').innerHTML = contents;
                         }
                         else if (data.status === "400") {
-                            const contents = ` ${data.info} `
+                            const contents = ` Your rating --  ${data.rate} your comment -- ${data.comment} `
                             document.querySelector('#result').innerHTML = contents;
                         }
                         else {
                             document.querySelector('#result').innerHTML = 'There was an error.';
                         }
-                        document.querySelector('#review').innerHTML = ""
+                        document.querySelector('#review').innerHTML = ''
                     }
                     // Add data to send with request
                     const data = new FormData();
@@ -51,7 +112,8 @@
             };
             });
 
-            function secpage() {
+            function secpage(elem) {
+                console.log(elem.getAttribute("name"));
                 document.querySelector('#review').innerHTML = '<h1>Rating</h1>' +
                             '<input name = "rating" value = "1" id = "1"  type="radio" />1 '+ 
                             '<input name = "rating" value = "2" id = "2"  type="radio" />2 ' +
@@ -69,20 +131,21 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <form class="form-inline" action="/action_page.php">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-success" type="submit">Search</button>
-            <div class = "navbar-nav ml-auto">
-                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+        <form class="form-inline" id = "search">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" id = "searchinp">
+            <button class="btn btn-success" type="submit" id = "searchbut">Search</button>
+            <div class = "navbar-nav ">
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}" style="float:right">Logout</a>
             </div>
         </form>
         </nav>
         <div class="container">
             <div class="row">
-                <div class="col-sm-6">
-                    <button class="btn btn-success" onclick="secpage()">View book</button>
+                <div class="col-sm-6" id = "fir">
+                    <div id="result1"></div>
                 </div>
                 <div class="col-sm-6" id = "sec">
+                    <div id ="bookpage"></div>
                     <div class = container>
                         <form id = "review"></form>
                 <div id="result"></div>

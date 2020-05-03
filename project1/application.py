@@ -162,11 +162,18 @@ def review_api():
     ISBN = "1416949658"
     rate = request.form.get('rate')
     comment = request.form.get("comment")
-    if Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first() is None:
+    revi = Review.query.filter(and_(Review.name == name, Review.ISBN_No == ISBN)).first()
+    if  revi is None:
         rev = Review(name = name, ISBN_No = ISBN, review_rate = rate, review_description = comment)
         db.session.add(rev)
         db.session.commit()
-        return jsonify({"success": True, "info" : "please see your rating and comment in above section", "status":"200"})
+        return jsonify({"success": True, "rate" : rate, "comment" : comment, "status":"200"})
+    elif revi and revi.review_rate is not None and revi.review_description is not None :
+        revi.review_description = comment
+        revi.review_rate = rate
+        db.session.add(revi)
+        db.session.commit()
+        return jsonify({"success": True, "rate" : rate, "comment" : comment, "status":"200"})
     else:
         return jsonify({"success": False})
 
@@ -174,7 +181,8 @@ def review_api():
 @app.route("/api/search", methods = ["POST", "GET"])
 def search_api():
     data = request.get_json()
-    key = data["key"]
+    key = request.form.get('key')
+    # key = data["key"]
     key = key.title()
     key = "%"+key+"%"
     dbooks = {"books":[]}
@@ -188,6 +196,7 @@ def search_api():
                 dic["Author"] = i.author
                 dic["Year"] = i.year
                 dbooks["books"].append(dic)
+            dbooks["success"] = True
             return jsonify(dbooks)
                 
         else :
@@ -198,11 +207,7 @@ def search_api():
 @app.route("/api/bookpage", methods = ["POST", "GET"])
 def bookpage_api():
     data = request.get_json()
-    ISBN = data["ISBN"]
+    ISBN = request.form.get('ISBN')
+    print(ISBN)
     Book_obj = Book.query.get(ISBN)
-    dic = dict()
-    dic["ISBN"] = Book_obj.ISBN
-    dic["Title"] = Book_obj.title
-    dic["Author"] = Book_obj.author
-    dic["Year"] = Book_obj.year
-    return jsonify(dic)
+    return jsonify({"success": True, "ISBN" : Book_obj.ISBN, "Title" : Book_obj.title, "Author": Book_obj.author, "Year" : Book_obj.year})
