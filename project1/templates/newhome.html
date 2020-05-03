@@ -45,18 +45,19 @@
                 });
 
                 function bookpage(elem) {
-                    
+                    document.querySelector('#result').innerHTML = ''
                     const request = new XMLHttpRequest();
-                    const ISBN = elem.getAttribute("name")
+                    var ISBN = elem.getAttribute("name")
                     request.open('POST', '/api/bookpage');
                     request.onload = () => { 
                         const data = JSON.parse(request.responseText);
 
                         if (data.success) {
 
-                            document.querySelector('#bookpage').innerHTML = ` <div class="card"> ` +
-                                `<div class="card-body"> Title -- ${data.Title} <br> ISBN -- ${data.ISBN}  <br> Author -- ${data.Author} 
-                                <br> Year -- ${data.Year}</div> </div> `
+                            document.querySelector('#bookpage').innerHTML = `<br><br> <div class="card"> `+
+                                `<div class="card-body"> <h5> Title -- ${data.Title} </h5><br> ISBN -- ${data.ISBN}  <br> Author -- ${data.Author} ` +
+                                `<br> Year -- ${data.Year} <br> `  +
+                                '<button class="btn btn-success" name = '+data.ISBN+' onclick = secpage(this)>Review</button></div> </div> '
 
                         }
 
@@ -69,9 +70,22 @@
 
                 }
 
-            document.addEventListener('DOMContentLoaded', () => {
-
-                document.querySelector('#review').onsubmit = () => {
+            function secpage(ele) {
+                var ISBN = ele.getAttribute("name")
+                document.querySelector('#review').innerHTML = '<h1>Rating</h1>' +
+                            '<input name = "rating" value = "1" id = "1"  type="radio" />1 '+ 
+                            '<input name = "rating" value = "2" id = "2"  type="radio" />2 ' +
+                            '<input name = "rating" value = "3" id = "3"  type="radio" />3 ' +
+                            '<input name = "rating" value = "4" id = "4"  type="radio" />4 ' +
+                            '<input name = "rating" value = "5" id = "5"  type="radio" />5 ' +
+                            '<div class="form-group"> ' +
+                                '<label for="comment">Comment:</label> ' +
+                                '<textarea class="form-control" rows="3" id="comment" name="text"></textarea> ' +
+                            '</div> ' +
+                            '<button id = "sub" type="submit" class="btn btn-primary" name = "action" value = "comment">Submit</button> ' +
+                        '</form> </div> '
+                
+                        document.querySelector('#review').onsubmit = () => {
                     var rate = "";
                     document.querySelector('#result').innerHTML = ""
                     var x = document.getElementsByName("rating")
@@ -106,26 +120,11 @@
                     const data = new FormData();
                     data.append('rate', rate)
                     data.append('comment', comment);
+                    data.append('ISBN', ISBN)
                     // Send request
                     request.send(data);
                     return false;
             };
-            });
-
-            function secpage(elem) {
-                console.log(elem.getAttribute("name"));
-                document.querySelector('#review').innerHTML = '<h1>Rating</h1>' +
-                            '<input name = "rating" value = "1" id = "1"  type="radio" />1 '+ 
-                            '<input name = "rating" value = "2" id = "2"  type="radio" />2 ' +
-                            '<input name = "rating" value = "3" id = "3"  type="radio" />3 ' +
-                            '<input name = "rating" value = "4" id = "4"  type="radio" />4 ' +
-                            '<input name = "rating" value = "5" id = "5"  type="radio" />5 ' +
-                            '<div class="form-group"> ' +
-                                '<label for="comment">Comment:</label> ' +
-                                '<textarea class="form-control" rows="3" id="comment" name="text"></textarea> ' +
-                            '</div> ' +
-                            '<button id = "sub" type="submit" class="btn btn-primary" name = "action" value = "comment">Submit</button> ' +
-                        '</form> </div> '
             }
         </script>   
     </head>
