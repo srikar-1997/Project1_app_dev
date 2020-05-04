@@ -53,25 +53,36 @@
                         const data = JSON.parse(request.responseText);
 
                         if (data.success) {
-
-                            document.querySelector('#bookpage').innerHTML = `<br><br> <div class="card"> `+
+                            var info = `<br><br> <div class="card"> `+
                                 `<div class="card-body"> <h5> Title -- ${data.Title} </h5><br> ISBN -- ${data.ISBN}  <br> Author -- ${data.Author} ` +
-                                `<br> Year -- ${data.Year} <br> `  +
-                                '<button class="btn btn-success" name = '+data.ISBN+' onclick = secpage(this)>Review</button></div> </div> '
-
+                                `<br> Year -- ${data.Year} <br> `
+                                
+                            if ('revs' in data) {
+                                info += `<br> <h5>Ratings and comments</h5>`
+                                for (let i = 0; i < data.revs.length; i++) {
+                                    info +=  `<br> ${data.revs[i]['Name']} rated ---------  ${data.revs[i]['rate']}` +
+                                             `<br> ${data.revs[i]['Name']} commneted ---------  ${data.revs[i]['comm']}`
+                                }
+                                document.querySelector('#bookpage').innerHTML = info + `</div> </div> `
+                            } else {
+                                document.querySelector('#bookpage').innerHTML = info + `</div> </div> `
+                            }
+                            secpage(ISBN)
                         }
 
+                        
                     }
                     const data = new FormData();
                     data.append('ISBN', ISBN)
                     // Send request
                     request.send(data);
+                    
                     return false;
+                    
 
                 }
 
-            function secpage(ele) {
-                var ISBN = ele.getAttribute("name")
+            function secpage(ISBN) {
                 document.querySelector('#review').innerHTML = '<h1>Rating</h1>' +
                             '<input name = "rating" value = "1" id = "1"  type="radio" />1 '+ 
                             '<input name = "rating" value = "2" id = "2"  type="radio" />2 ' +

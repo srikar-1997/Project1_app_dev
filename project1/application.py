@@ -90,7 +90,6 @@ def authentication():
         if userobj:
             if pwd == userobj.password :
                 session["name"] = name
-                print(session["name"])
                 return redirect(url_for('index'))
             else :
                 return render_template("Registration.html", flag_1= 1)
@@ -208,6 +207,17 @@ def search_api():
 def bookpage_api():
     data = request.get_json()
     ISBN = request.form.get('ISBN')
-    print(ISBN)
     Book_obj = Book.query.get(ISBN)
-    return jsonify({"success": True, "ISBN" : Book_obj.ISBN, "Title" : Book_obj.title, "Author": Book_obj.author, "Year" : Book_obj.year})
+    isb = Review.query.filter_by(ISBN_No = ISBN).all()
+    revs = []
+
+    if isb == []:
+        return jsonify({"success": True, "ISBN" : Book_obj.ISBN, "Title" : Book_obj.title, "Author": Book_obj.author, "Year" : Book_obj.year})
+    else :
+        for i in isb:
+            dic = dict()
+            dic["Name"] = i.name
+            dic["rate"] = i.review_rate
+            dic["comm"] = i.review_description
+            revs.append(dic)
+        return jsonify({"success": True, "ISBN" : Book_obj.ISBN, "Title" : Book_obj.title, "Author": Book_obj.author, "Year" : Book_obj.year, "revs" : revs})
