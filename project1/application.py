@@ -26,7 +26,6 @@ Session(app)
 def search_api():
     data = request.get_json()
     key = request.form.get('key')
-    # key = data["key"]
     key = key.title()
     key = "%"+key+"%"
     dbooks = {"books":[]}
@@ -78,8 +77,9 @@ def index():
     if 'name' not in session :
         return redirect(url_for('register'))
     elif session['name'] :
-        xyz = Book.query.all()
-        return render_template("home.html", xyz=xyz, flag1=1)
+    	return render_template("newhome.html")
+        # xyz = Book.query.all()
+        # return render_template("home.html", xyz=xyz, flag1=1)
 
 @app.route("/search", methods = ["POST"])
 def search():
