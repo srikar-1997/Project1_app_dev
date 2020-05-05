@@ -22,29 +22,55 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-@app.route("/api/search")
-def searchApi():
+@app.route("/api/search", methods = ["POST", "GET"])
+def search_api():
     data = request.get_json()
-    key = data["key"]
+    key = request.form.get('key')
+    # key = data["key"]
     key = key.title()
     key = "%"+key+"%"
-    api_search = Book.query.filter(or_(Book.ISBN.like(key), Book.year.like(key), Book.author.like(key), Book.title.like(key))).all()
     dbooks = {"books":[]}
-    if api_search:
-        if isinstance(api_search, list):
-            for i in api_search:
+    filtered_list1 = Book.query.filter(or_(Book.ISBN.like(key), Book.year.like(key), Book.author.like(key), Book.title.like(key))).all()
+    if filtered_list1:
+        if isinstance(filtered_list1, list):
+            for i in filtered_list1:
                 dic = dict()
                 dic["ISBN"] = i.ISBN
                 dic["Title"] = i.title
                 dic["Author"] = i.author
                 dic["Year"] = i.year
                 dbooks["books"].append(dic)
+            dbooks["success"] = True
             return jsonify(dbooks)
                 
         else :
-            return jsonify({"ISBN": api_search.ISBN,"Title": api_search.title, "Author": api_search.author, "year": api_search.year})
+            return jsonify({"ISBN": filtered_list1.ISBN,"Title": filtered_list1.title, "Author": filtered_list1.author, "year": filtered_list1.year})
     
     return jsonify({"error": "No Books"}), 400
+
+# @app.route("/api/search")
+# def searchApi():
+#     data = request.get_json()
+#     key = data["key"]
+#     key = key.title()
+#     key = "%"+key+"%"
+#     api_search = Book.query.filter(or_(Book.ISBN.like(key), Book.year.like(key), Book.author.like(key), Book.title.like(key))).all()
+#     dbooks = {"books":[]}
+#     if api_search:
+#         if isinstance(api_search, list):
+#             for i in api_search:
+#                 dic = dict()
+#                 dic["ISBN"] = i.ISBN
+#                 dic["Title"] = i.title
+#                 dic["Author"] = i.author
+#                 dic["Year"] = i.year
+#                 dbooks["books"].append(dic)
+#             return jsonify(dbooks)
+                
+#         else :
+#             return jsonify({"ISBN": api_search.ISBN,"Title": api_search.title, "Author": api_search.author, "year": api_search.year})
+    
+#     return jsonify({"error": "No Books"}), 400
 
 
 @app.route("/")

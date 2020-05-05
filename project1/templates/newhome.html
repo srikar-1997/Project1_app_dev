@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                document.querySelector('#search').onsubmit = () => {
+                    // Initialize new request
+                    const request = new XMLHttpRequest();
+                    const key = document.querySelector('#searchinp').value;
+                    request.open('POST', '/api/search');
+                    // Callback function for when request completes
+                    request.onload = () => {
+                        // Extract JSON data from request
+                        const data = JSON.parse(request.responseText);
+                        let info = '<h1>searchresults</h1><br>';
+                        // Update the result div
+                        if (data.success) {
+                            for (let i = 0; i < data.books.length; i++) {
+                                 info += `<div class="card"> ` +
+                                `<div class="card-body"><h3>${data.books[i].Title}</h3> <br>` +
+                                `${data.books[i].ISBN} <br>`+
+                                `${data.books[i].Author} <br>`+
+                                `${data.books[i].Year} <br>` +
+                                '<button class="btn btn-success" name = '+data.books[i].ISBN+' onclick = bookpage(this) >viewBook</button>'+
+                                `</div> </div>`
+                            }
+                            document.querySelector('#result1').innerHTML = info
+                            
+                        }
+                    }
+                    // Add data to send with request
+                    const data = new FormData();
+                    data.append('key', key)
+                    // Send request
+                    request.send(data);
+                    return false;
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <form class="form-inline" id = "search">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search" id = "searchinp">
+            <button class="btn btn-success" type="submit" id = "searchbut">Search</button>
+            <div class = "navbar-nav ">
+                <a class="nav-item nav-link" href="{{ url_for('logout') }}" style="float:right">Logout</a>
+            </div>
+        </form>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6" id = "fir">
+                    <div id="result1"></div>
+                </div>
+                <div class="col-sm-6" id = "sec">
+            </div>
+        </div>
+    </body>
+</html>
