@@ -1,7 +1,7 @@
 import os
 import datetime
 import bcrypt
-from models import *
+from project1.models import *
 
 from flask import Flask, session, render_template, request, redirect, url_for, jsonify
 from flask_session import Session
