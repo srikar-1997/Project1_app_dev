@@ -12,6 +12,7 @@ Flask-Session = "*"
 SQLAlchemy = "*"
 gunicorn = "*"
 bcrypt = "*"
+flask-sqlalchemy = "*"
 
 [requires]
 python_version = "3.8"
